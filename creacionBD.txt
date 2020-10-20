@@ -1,0 +1,148 @@
+
+CREATE TABLE Paciente (
+    IDPaciente int IDENTITY(1,1) PRIMARY KEY,
+	Nombre varchar(50),
+	Apellido varchar(50),
+	fechaNacimiento date,
+	sexo bit,
+	domicilio varchar(255),
+	telefono varchar(50)
+);
+
+
+CREATE TABLE PacienteEnfermedad (	
+	IDExpediente int IDENTITY(1,1) PRIMARY KEY, 
+	IDPaciente int,
+	fechaConsulta date,
+	enfermedad varchar(50),
+	porcentaje float,
+	tratamiento varchar(255),
+	FOREIGN KEY (IDPaciente) REFERENCES Paciente(IDPaciente)
+);
+
+CREATE TABLE PacienteControl (
+	IDControl int IDENTITY(1,1) PRIMARY KEY,
+	IDPaciente int,
+	fechaConsulta date,
+	enfermedad varchar(50),
+	porcentaje float,
+	sintoma1 varchar(50),
+	sintoma2 varchar(50),
+	sintoma3 varchar(50),
+	sintoma4 varchar(50),
+	sintoma5 varchar(50),
+	sintoma6 varchar(50),
+	sintoma7 varchar(50),
+	sintoma8 varchar(50),
+	sintoma9 varchar(50),
+	sintoma10 varchar(50),
+	FOREIGN KEY (IDPaciente) REFERENCES Paciente(IDPaciente)
+);
+
+------------------------------------------------------------------------------------------------------------------------------
+/*
+* BookMedik Database
+* @author Evilnapsis
+*/
+create database bookmedik;
+use bookmedik; 
+set sql_mode='';
+create table user (
+	id int not null auto_increment primary key,
+	username varchar(50),
+	name varchar(50),
+	lastname varchar(50),
+	email varchar(255),
+	password varchar(60),
+	is_active boolean not null default 1,
+	is_admin boolean not null default 0,
+	created_at datetime
+);
+
+insert into user (username,password,is_admin,is_active,created_at) value ("admin",sha1(md5("admin")),1,1,NOW());
+
+
+create table pacient (
+	id int not null auto_increment primary key,
+	no varchar(50),
+	name varchar(50),
+	lastname varchar(50),
+	gender varchar(1),
+	day_of_birth date,
+	email varchar(255),
+	address varchar(255),
+	phone varchar(255),
+	image varchar(255),
+	sick varchar(500),
+	medicaments varchar(500),
+	alergy varchar(500),
+	is_favorite boolean not null default 1,
+	is_active boolean not null default 1,
+	created_at datetime
+);
+
+create table category (
+	id int not null auto_increment primary key,
+	name varchar(200)
+	);
+
+insert into category (name) value ("Modulo 1");
+
+
+create table medic (
+	id int not null auto_increment primary key,
+	no varchar(50),
+	name varchar(50),
+	lastname varchar(50),
+	gender varchar(1),
+	day_of_birth date,
+	email varchar(255),
+	address varchar(255),
+	phone varchar(255),
+	image varchar(255),
+	is_active boolean not null default 1,
+	created_at datetime,
+	category_id int,
+	foreign key (category_id) references category(id)
+);
+
+
+
+create table status (
+	id int not null auto_increment primary key,
+	name varchar(100)
+);
+
+insert into status (id,name) values (1,"Pendiente"), (2,"Aplicada"),(3,"No asistio"),(4,"Cancelada");
+
+create table payment (
+	id int not null auto_increment primary key,
+	name varchar(100)
+);
+
+insert into payment (id,name) values  (1,"Pendiente"),(2,"Pagado"),(3,"Anulado");
+
+create table reservation(
+	id int not null auto_increment primary key,
+	title varchar(100),
+	note text,
+	message text,
+	date_at varchar(50),
+	time_at varchar(50),
+	created_at datetime,
+	pacient_id int,
+	symtoms text,
+	sick text,
+	medicaments text,
+	user_id int,
+	medic_id int,
+	price double,
+	is_web boolean not null default 0,
+	payment_id int not null default 1,
+	foreign key (payment_id) references payment(id),
+	status_id int not null default 1,
+	foreign key (status_id) references status(id),
+	foreign key (user_id) references user(id),
+	foreign key (pacient_id) references pacient(id),
+	foreign key (medic_id) references medic(id)
+);
